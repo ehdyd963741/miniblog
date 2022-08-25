@@ -1,5 +1,5 @@
 <template>
-  <h1>BlogList</h1>
+  <h1>List</h1>
 </template>
 
 <script>

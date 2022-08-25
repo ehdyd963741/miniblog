@@ -1,5 +1,5 @@
 <template>
-  <h1>BlogFooter</h1>
+  <h1>Footer</h1>
 </template>
 
 <script>

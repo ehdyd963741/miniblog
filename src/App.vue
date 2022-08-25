@@ -30,21 +30,26 @@ export default {
   padding: 0;
   box-sizing: border-box;  
 }
+
 ul, li {
   list-style: none;
 }
+
 img {
   vertical-align: middle;
   border: 0;
 }
+
 a {
   color: #333;
   text-decoration: none;
 }
+
 html {
   font-size: 16px;
   overflow-x:hidden;
 }
+
 body {
   font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
   font-size: 14px;
@@ -52,7 +57,17 @@ body {
   line-height: 1.2;
   letter-spacing: -0.64;
   color: #000;
+  background-color: #f6f6f6;
+}
+.shadow {
+  box-shadow: 5px 10px 10px rgba(0,0,0,0.3);
 }
 
+.wrap {
+  position: relative;
+  display: block;
+  width: 90%;
+  margin: 0 auto;
+}
 
 </style>
