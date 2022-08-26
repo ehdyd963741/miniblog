@@ -63,7 +63,7 @@ export default {
   outline: none;
 }
 .input-box {  
-  width: 70%;
+  width: calc(100% - 60px);
   font-size: 16px;
   margin-left: 20px;
 }
@@ -74,6 +74,7 @@ export default {
   background-color: hotpink;
   cursor: pointer;
 }
+
 .add-bt-icon {
   display: inline-block;
   vertical-align: middle;

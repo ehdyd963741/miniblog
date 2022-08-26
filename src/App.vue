@@ -25,6 +25,7 @@ export default {
 <style>
 @charset 'utf-8';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -60,7 +61,7 @@ body {
   background-color: #f6f6f6;
 }
 .shadow {
-  box-shadow: 5px 10px 10px rgba(0,0,0,0.3);
+  box-shadow: 3px 7px 7px rgba(0,0,0,0.2);
 }
 
 .wrap {
