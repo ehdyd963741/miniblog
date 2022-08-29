@@ -1,24 +1,36 @@
 <template>
   <div class="input-wrap shadow">
     <input type="text" v-model="newItem" class="input-box" maxlength="30" @keyup.enter="addItem">
-    <!-- <button v-on:click="addItem">추가</button> -->
-    <span @click="addItem" class="add-bt"><i class="fas fa-plus add-bt-icon"></i>
-    </span>
+
+    <div class="option">
+      <span @click="addIcon(0)" class="img1">
+        이미지1
+      </span>
+      <span @click="addIcon(1)" class="img2">
+        이미지2
+      </span>
+      <span @click="addIcon(2)" class="img3">
+        이미지3
+      </span>
+
+      <span @click="addItem" class="add-bt">
+        <i class="fas fa-plus add-bt-icon"></i>
+      </span>
+    </div>
   </div>
 </template>
 
 <script>
-  import {
-    ref
-  } from 'vue';
+  import {ref} from 'vue';
   export default {
     setup(props, context) {
 
       const newItem = ref('');
-
+      const newIcon = ref(0);
 
       const addItem = () => {
         let temp = newItem.value;
+        let icon = newIcon.value;
         // 앞쪽 뒷쪽 공백 제거
         temp = temp.trim();
         // 추후 업데이트 예정
@@ -29,13 +41,9 @@
           /*
             {completed:false, title:메모내용, icon:파일명 ....}
           */
-
           console.log(temp);
-          context.emit("additem", temp);
-
-
+          context.emit("additem", temp, icon);
           resetItem();
-
         }
       }
 
@@ -44,12 +52,15 @@
         newItem.value = '';
       }
 
-      return {
-        newItem,
-        addItem
+      const addIcon = (index) => {
+        newIcon.value = index;
       }
 
-
+      return {
+        newItem,
+        addItem,
+        addIcon
+      }
     }
   }
 </script>
@@ -75,17 +86,53 @@
   }
 
   .input-box {
-    width: calc(100% - 60px);
+    width: calc(93% - 250px);
     font-size: 16px;
     margin-left: 10px;
 
   }
 
-  .add-bt {
+  .option {
+    position: absolute;
     display: block;
-    float: right;
+    right: 0;
+    top: 0;
+  }
+
+  .img1:active, .img2:active, .img3:active {
+    outline: 1px solid red;
+  }
+
+  .img1 {
+    display: inline-block;
     width: 40px;
-    height: 50px;
+    height: 40px;
+    font-size: 0;
+    cursor: pointer;
+    background: url('@/assets/images/dog1.png') no-repeat center;
+    background-size: cover;
+  }
+
+  .img2 {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    font-size: 0;
+    cursor: pointer;
+    background: url('@/assets/images/dog2.png') no-repeat center;
+    background-size: cover;
+  }
+  .img3 {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    font-size: 0;
+    cursor: pointer;
+    background: url('@/assets/images/cat.png') no-repeat center;
+    background-size: cover;
+  }
+  .add-bt {
+    display: inline-block;
     background-color: hotpink;
     cursor: pointer;
   }

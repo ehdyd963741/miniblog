@@ -2,8 +2,9 @@
   <div class="wrap">
     <BlogHeader />
     <BlogInput @additem="addMemo" />
-    <BlogList v-bind:memodata="memoItemArr" @removeitem="deleteMemo" @updateitem="updateMemo" />
+    <BlogList v-bind:memodata="memoItemArr" @removeitem="deleteMemo" @updateitem="updateMemo"/>
     <BlogFooter @delteitem="clearMemo" />
+    <IntroView @closeintro="hideIntro" v-if="introShow"/>
   </div>
 </template>
 
@@ -16,12 +17,14 @@
   import BlogInput from '@/components/BlogInput.vue'
   import BlogList from '@/components/BlogList.vue'
   import BlogFooter from '@/components/BlogFooter.vue'
+  import IntroView from '@/components/IntroView.vue'
   export default {
     components: {
       BlogHeader,
       BlogInput,
       BlogList,
-      BlogFooter
+      BlogFooter,
+      IntroView
     },
     setup() {
       // localstorage 의 목록을 가지고 오기
@@ -45,13 +48,15 @@
         // 배열(memoItemArr) 에서도 지운다.
         memoItemArr.splice(index, 1);
       }
-      const updateMemo = (item) => {
+      const updateMemo = (item, index) => {
         // localstorage 에서는 update 메소드를 지원하지 않습니다.
         // 그래서 key찾아서 지우고 , 다시 set한다.
         // 1.찾아서 지우는 코드
         localStorage.removeItem(item.id);
         // 3.변경하는 코드
-        item.complete = !item.complete;
+        // item.complete = !item.complete;
+        // index까지 추가한 컴플리트
+        memoItemArr[index].complete = !memoItemArr[index].complete;
         // 2.다시 set 하는 코드
         localStorage.setItem(item.id, JSON.stringify(item));
       }
@@ -69,18 +74,24 @@
           addZero(date.getHours()) + addZero(date.getMinutes()) + addZero(date.getSeconds());
       }
 
+      const getCurrentTime = () => {
+        let date = new Date();
+        return date.getFullYear().toString() + '/' + addZero(date.getMonth() + 1) + '/' + addZero(date.getDate()) + '/' +
+          addZero(date.getHours()) + '/' + addZero(date.getMinutes());
+      }
 
+      const iconArr = ['dog1.png', 'dog2.png', 'cat.png'];
 
-
-      const addMemo = (item) => {
-
-        console.log('gogo', item);
+      const addMemo = (item, index) => {
         // json 저장 문자열
-        // {completed:false, title:메모내용, icon:파일명 ...} 
+        // {completed:false, title:메모내용, icon:파일명 ...}
+        // icon 관련 처리
         let memoTemp = {
           id: getCurrentDate(),
           complete: false,
           memotitle: item,
+          memodate: getCurrentTime(),
+          memoicon: iconArr[index]
         };
         // ***추후 실제 DB 연동 예정***
         localStorage.setItem(memoTemp.id, JSON.stringify(memoTemp));
@@ -95,12 +106,19 @@
         memoItemArr.splice(0);
       }
 
+      const introShow = ref(true);
+      const hideIntro = () => {
+        introShow.value = false;
+      }
+
       return {
         memoItemArr,
         deleteMemo,
         updateMemo,
         addMemo,
-        clearMemo
+        clearMemo,
+        hideIntro,
+        introShow
       }
     }
   }
