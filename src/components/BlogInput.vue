@@ -17,22 +17,28 @@
         <i class="fas fa-plus add-bt-icon"></i>
       </span>
     </div>
-  <!-- 안내창 -->
-  <ModalView :show="showModal" @closemodal="showModal=false">
-    <template #header>
-      <h3>Warning</h3>
-    </template>
-    <template #body>
-      <h3>내용을 작성해 주십쇼</h3>
-    </template>
-  </ModalView>
+    <!-- 안내창 -->
+    <ModalView :show="showModal" @closemodal="showModal=false">
+      <template #header>
+        <h3>Warning</h3>
+      </template>
+      <template #body>
+        <h3>내용을 작성해 주십쇼</h3>
+      </template>
+    </ModalView>
 
 
   </div>
 </template>
 
 <script>
-  import {ref} from 'vue';
+  import {
+    ref
+  } from 'vue';
+
+  import {
+    useStore
+  } from 'vuex';
 
   import ModalView from '@/components/common/ModalVue.vue'
 
@@ -41,7 +47,8 @@
       ModalView
     },
 
-    setup(props, context) {
+    setup() {
+      const store = useStore();
 
       const newItem = ref('');
       const newIcon = ref(0);
@@ -54,15 +61,11 @@
         temp = temp.trim();
         // 추후 업데이트 예정
         if (temp !== '') {
-          //localStorage.setItem(키, 값)
-          //localStorage.setItem(키, json 문자열로 저장)
-          // json 저장 문자열
-          /*
-            {completed:false, title:메모내용, icon:파일명 ....}
-          */
-          context.emit("additem", temp, icon);
+          // context.emit("additem", temp, icon);
+          store.commit('ADD_MEMO', {item:temp, index:icon});
+
           resetItem();
-        }else{
+        } else {
           showModal.value = true;
         }
       }
@@ -120,7 +123,9 @@
     top: 0;
   }
 
-  .img1:active, .img2:active, .img3:active {
+  .img1:active,
+  .img2:active,
+  .img3:active {
     outline: 1px solid red;
   }
 
@@ -143,6 +148,7 @@
     background: url('@/assets/images/dog2.png') no-repeat center;
     background-size: cover;
   }
+
   .img3 {
     display: inline-block;
     width: 40px;
@@ -152,6 +158,7 @@
     background: url('@/assets/images/cat.png') no-repeat center;
     background-size: cover;
   }
+
   .add-bt {
     display: inline-block;
     background-color: hotpink;
