@@ -17,16 +17,35 @@
         <i class="fas fa-plus add-bt-icon"></i>
       </span>
     </div>
+  <!-- 안내창 -->
+  <ModalView :show="showModal" @closemodal="showModal=false">
+    <template #header>
+      <h3>Warning</h3>
+    </template>
+    <template #body>
+      <h3>내용을 작성해 주십쇼</h3>
+    </template>
+  </ModalView>
+
+
   </div>
 </template>
 
 <script>
   import {ref} from 'vue';
+
+  import ModalView from '@/components/common/ModalVue.vue'
+
   export default {
+    components: {
+      ModalView
+    },
+
     setup(props, context) {
 
       const newItem = ref('');
       const newIcon = ref(0);
+      const showModal = ref(false);
 
       const addItem = () => {
         let temp = newItem.value;
@@ -41,9 +60,10 @@
           /*
             {completed:false, title:메모내용, icon:파일명 ....}
           */
-          console.log(temp);
           context.emit("additem", temp, icon);
           resetItem();
+        }else{
+          showModal.value = true;
         }
       }
 
@@ -59,7 +79,8 @@
       return {
         newItem,
         addItem,
-        addIcon
+        addIcon,
+        showModal
       }
     }
   }

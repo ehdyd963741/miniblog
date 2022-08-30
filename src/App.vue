@@ -2,9 +2,10 @@
   <div class="wrap">
     <BlogHeader />
     <BlogInput @additem="addMemo" />
-    <BlogList v-bind:memodata="memoItemArr" @removeitem="deleteMemo" @updateitem="updateMemo"/>
+    <BlogList v-bind:memodata="memoItemArr" @removeitem="deleteMemo" @updateitem="updateMemo" />
     <BlogFooter @delteitem="clearMemo" />
-    <IntroView @closeintro="hideIntro" v-if="introShow"/>
+    <IntroView @closeintro="hideIntro" v-if="introShow" />
+    <!-- <ModalVue /> -->
   </div>
 </template>
 
@@ -18,6 +19,7 @@
   import BlogList from '@/components/BlogList.vue'
   import BlogFooter from '@/components/BlogFooter.vue'
   import IntroView from '@/components/IntroView.vue'
+  // import ModalVue from '@/components/common/ModalVue.vue'
   export default {
     components: {
       BlogHeader,
@@ -25,6 +27,7 @@
       BlogList,
       BlogFooter,
       IntroView
+      // ModalVue
     },
     setup() {
       // localstorage 의 목록을 가지고 오기
@@ -40,6 +43,17 @@
           memoItemArr.push(JSON.parse(obj));
         }
         // 키값을 이용해서 정렬하기(오름차순)
+        // memoItemArr.sort((a, b) => {
+        //   if (a.id > b.id) return 1;
+        //   if (a.id === b.id) return 0;
+        //   if (a.id < b.id) return -1;
+        // });
+        // 키값을 이용해서 정렬하기(내림차순)
+        memoItemArr.sort((a, b) => {
+          if (a.id > b.id) return -1;
+          if (a.id === b.id) return 0;
+          if (a.id < b.id) return 1;
+        });
         // memoItemArr.sort();
       }
       const deleteMemo = (item, index) => {
@@ -76,7 +90,8 @@
 
       const getCurrentTime = () => {
         let date = new Date();
-        return date.getFullYear().toString() + '/' + addZero(date.getMonth() + 1) + '/' + addZero(date.getDate()) + '/' +
+        return date.getFullYear().toString() + '/' + addZero(date.getMonth() + 1) + '/' + addZero(date.getDate()) +
+          '/' +
           addZero(date.getHours()) + '/' + addZero(date.getMinutes());
       }
 
@@ -95,18 +110,33 @@
         };
         // ***추후 실제 DB 연동 예정***
         localStorage.setItem(memoTemp.id, JSON.stringify(memoTemp));
-        // 화면 갱신을 위한 배열 요소 추가
+
+        // 키값을 이용해서 정렬하기(오름차순)
+        memoItemArr.sort((a, b) => {
+          if (a.id > b.id) return -1;
+          if (a.id === b.id) return 0;
+          if (a.id < b.id) return 1;
+        });
         memoItemArr.push(memoTemp);
       }
 
       const clearMemo = () => {
         // localStorage에서 내용 전체 삭제
-        // 추후 DB 연동 예정
-        localStorage.clear();
-        memoItemArr.splice(0);
-      }
 
-      const introShow = ref(true);
+        localStorage.clear();
+        // 배열(memoItemArr) 에서도 지운다.
+        memoItemArr.splice(0);
+
+        // 키값을 이용해서 정렬하기(오름차순)
+        memoItemArr.sort((a, b) => {
+          if (a.id > b.id) return -1;
+          if (a.id === b.id) return 0;
+          if (a.id < b.id) return 1;
+        });
+
+      }
+      // 첫 화면(introview) 보여질 여부
+      const introShow = ref(false);
       const hideIntro = () => {
         introShow.value = false;
       }
