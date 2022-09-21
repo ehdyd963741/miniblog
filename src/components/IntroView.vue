@@ -2,7 +2,7 @@
   <div class="intro-wrap" @click="closeIntro">
     <h1>My Memo</h1>
     <div class="intro-cont">
-      <img :src="require('@/assets/images/dog1.png')"/>
+      <img :src="require('@/assets/images/dog1.png')" />
     </div>
   </div>
 </template>
@@ -13,7 +13,6 @@ export default {
     const closeIntro = () => {
       context.emit('closeintro');
     }
-
     return {
       closeIntro
     }
@@ -24,18 +23,14 @@ export default {
 <style scoped>
   .intro-wrap {
     position: fixed;
-    display: block;
     left: 0;
     top: 0;
+    display: block;
     width: 100vw;
     height: 100vh;
     background-color: #fff;
     text-align: center;
     cursor: pointer;
-  }
-  
-  .intro-wrap h1 {
-    margin-top: 100px;
   }
 
 </style>

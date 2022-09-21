@@ -9,7 +9,7 @@ import {ref} from 'vue';
 import {useStore} from 'vuex';
 export default {
 
-  setup (){
+  setup() {
     const title = ref('');
     const store = useStore();
     title.value = store.state.headerText
@@ -22,7 +22,7 @@ export default {
 
 <style scoped>
   h1 {
-    text-align: center;
     font-weight: 700;
+    text-align: center;
   }
-</style>
+</style>>

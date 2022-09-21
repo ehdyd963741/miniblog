@@ -2,53 +2,59 @@
   <div class="list-wrap">
     <TransitionGroup name="list" tag="ul">
     <!-- <ul> -->
-      <li v-for="(item,index) in items" :key="index" class="shadow">
-        <i class="fas fa-check-circle check-bt" @click="updateMemo(item, index)"
-          :class="{memoComplete:item.complete}"></i>
-          <span :class="{memoCompleteTxt:item.complete}">{{item.memotitle}}</span>
-        <div class="info">
-          <span class="icon" :style="{backgroundImage:'url(' + require(`@/assets/images/${item.memoicon}`) + ')'}"></span>
-          <span class="date">{{item.memodate}}</span>
-          <span class="remove-bt" @click="removeMemo(item, index)">
-            <i class="fas fa-trash"></i>
-          </span>
-        </div>
-      </li>
+        <li v-for="(item, index) in items" v-bind:key="index" class="shadow"> 
+          
+          <i class="fas fa-check-circle check-bt" @click="updateMemo(item, index)" :class="{memoComplete:item.complete}"></i>
+          
+          <span :class="{memoCompleteTxt:item.complete}"> {{item.memotitle}} </span>
+          
+          <div class="info">
+            <span class="icon" :style="{backgroundImage:'url(' + require(`@/assets/images/${item.memoicon}`) + ')'}"></span>            
+            <span class="date">{{item.memodate}}</span>
+            <span class="remove-bt" @click="removeMemo(item.id, index)">
+              <i class="fas fa-trash"></i>
+            </span>
+          </div>
+
+
+        </li>  
     <!-- </ul> -->
     </TransitionGroup>
+
   </div>
 </template>
 
 <script>
-  import {useStore} from 'vuex'
-  import {ref} from 'vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 
-  export default {
-    setup() {
-
-      // vuex store 사용
-      const store = useStore();
-      const items = ref([]);
-      items.value = store.state.memoItemArr;
-
-      const removeMemo = (item, index) => {
-        // context.emit('removeitem', item, index);
-        store.commit('DELETE_MEMO', {item, index})
-      }
-
-      const updateMemo = (item, index) => {
-        // context.emit("updateitem", item, index);
-        store.commit('UPDATE_MEMO', {item, index})
-      }
-
-      return {
-        removeMemo,
-        updateMemo,
-        items
-      }
-
+export default {  
+  setup() {
+    // vuex store 사용
+    const store = useStore();
+    store.dispatch('fetchReadMemo');
+    const items = computed( () => store.getters.getMemoArr );
+    const removeMemo = (id, index) => {
+      // context.emit('removeitem', item, index);
+      // store.commit('DELETE_MEMO', {item, index})
+      console.log('삭제 버튼', id);
+      store.dispatch('fetchDeleteMemo', {id, index})
     }
+
+    const updateMemo = (item, index) => {      
+      // context.emit("updateitem", item, index);
+      // store.commit('UPDATE_MEMO', {item, index})
+      store.dispatch('fetchUpdateMemo', {item, index})
+    }
+
+    return {            
+      removeMemo,
+      updateMemo,
+      items
+    }
+
   }
+}
 </script>
 
 <style scoped>
@@ -65,46 +71,40 @@
   .info {
     margin-left: auto;
   }
-
   .icon {
     display: inline-block;
     width: 40px;
     height: 40px;
     margin-right: 10px;
-    background: no-repeat;
-    background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;  
   }
-
   .date {
-
   }
-
   .remove-bt {
     cursor: pointer;
     margin-left: 10px;
     color: hotpink;
-
-  }
-
-  .remove-bt i {
-    font-size: 14px;
   }
 
   .check-bt {
     color: #b3adad;
-    line-height: 35px;
-    margin-right: 5px;
+    line-height: 50px;
+    margin-right: 10px;
     cursor: pointer;
   }
 
-  .memoComplete {
+  .check-bt:hover {
     color: #62acde;
+  }
 
+  .memoComplete {    
+    color: #62acde;
   }
 
   .memoCompleteTxt {
-    color: red;
+    color: #b3adad;
     text-decoration: line-through;
   }
   /* 애니메이션 */
